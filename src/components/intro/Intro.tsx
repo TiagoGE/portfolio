@@ -1,9 +1,18 @@
 import { IntroController } from "./IntroController";
 import styles from "./Intro.module.css";
 
+/** Typed out on arrival. Kept here rather than in the dictionaries because it reads the
+ *  same in every language. */
+const URL_TEXT = "www.tiagoguerra.dev";
+const GREETING = "welcome";
+
 /**
- * Pre-flight sequence: the site boots like an instrument, draws the GRU → YVR route,
- * then splits open to reveal the map.
+ * Opening sequence: the address typed out, a greeting on the line below, then the
+ * panels split to reveal the map.
+ *
+ * An earlier version flew a plane from GRU to YVR, which rehearsed the exact metaphor
+ * the map delivers two seconds later. The first seconds are the most valuable on the
+ * site and they should say "this person writes software", not repeat the geography.
  *
  * Server-rendered on purpose. If this only appeared after hydration the hero would
  * flash first and the intro would land on top of it. Because it ships in the HTML and
@@ -20,26 +29,38 @@ export function Intro({ name }: { name: string }) {
       <div className={`${styles.panel} ${styles.panelBottom}`} />
 
       <div className={styles.content}>
-        <div className={styles.route}>
-          <span className={`${styles.code} ${styles.codeFrom}`}>GRU</span>
-
-          <span className={styles.track}>
-            <span className={styles.plane}>
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <path
-                  fill="currentColor"
-                  transform="rotate(90 12 12)"
-                  d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"
-                />
-              </svg>
-            </span>
-          </span>
-
-          <span className={`${styles.code} ${styles.codeTo}`}>YVR</span>
-        </div>
-
         <p className={styles.name}>{name}</p>
-        <p className={styles.hint}>11.051 km</p>
+
+        {/*
+          Each line holds its full width from the first frame and is revealed by a clip
+          that walks left to right. Animating width instead made the centred block grow,
+          which slid the text leftwards while it was being read.
+
+          The character counts come from the strings above, so editing them cannot leave
+          the reveal stopping short or the caret landing in the wrong place.
+        */}
+        <div className={styles.terminal}>
+          <div className={styles.row}>
+            <span className={styles.prompt}>$</span>
+            <span
+              className={styles.line}
+              style={{ "--chars": URL_TEXT.length } as React.CSSProperties}
+            >
+              <span className={`${styles.typed} ${styles.typedUrl}`}>{URL_TEXT}</span>
+              <span className={`${styles.caret} ${styles.caretUrl}`} />
+            </span>
+          </div>
+
+          <div className={styles.row}>
+            <span
+              className={styles.line}
+              style={{ "--chars": GREETING.length } as React.CSSProperties}
+            >
+              <span className={`${styles.typed} ${styles.typedGreeting}`}>{GREETING}</span>
+              <span className={`${styles.caret} ${styles.caretGreeting}`} />
+            </span>
+          </div>
+        </div>
       </div>
 
       <IntroController />

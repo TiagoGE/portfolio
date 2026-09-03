@@ -25,16 +25,30 @@ export async function generateMetadata({
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
     title: dict.meta.title,
     description: dict.meta.description,
+    /*
+     * The site answers on more than one hostname: the domain, the www redirect and
+     * Vercel's own project URL, which cannot be removed. Without a canonical, a search
+     * engine can index the same page under two addresses and split its ranking.
+     *
+     * `languages` tells it that pt and en are translations of each other rather than
+     * duplicates.
+     */
+    alternates: {
+      canonical: `/${lang}`,
+      languages: { "pt-BR": "/pt", "en-CA": "/en" },
+    },
     openGraph: {
       title: dict.meta.title,
       description: dict.meta.description,
       locale: dict.locale,
       type: "website",
+      images: [{ url: `/og-${lang}.png`, width: 1200, height: 630, alt: dict.meta.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: dict.meta.title,
       description: dict.meta.description,
+      images: [`/og-${lang}.png`],
     },
   };
 }

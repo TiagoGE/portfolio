@@ -32,7 +32,7 @@ export function IntroController() {
     const timer = window.setTimeout(() => {
       if (root.dataset.intro !== "skip") root.dataset.intro = "done";
       teardown();
-    }, 2900);
+    }, 3300);
 
     function teardown() {
       window.clearTimeout(timer);

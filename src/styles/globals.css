@@ -44,7 +44,7 @@
    * view add this so they play as the panels open instead of unseen behind them.
    * Zeroed the moment the intro is skipped.
    */
-  --intro-offset: 2200ms;
+  --intro-offset: 2600ms;
 
   --dur-fast: 180ms;
   --dur-base: 420ms;

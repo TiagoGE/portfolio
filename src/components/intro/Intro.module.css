@@ -1,14 +1,16 @@
 /*
  * Timeline (ms from first paint):
- *    0  panels closed, GRU fades in
- *  500  route line draws while the plane flies it
- * 1500  YVR arrives
- * 1800  content fades out
- * 2100  panels split apart, revealing the map behind
- * 2850  overlay goes inert
+ *    0  panels closed, name rises
+ *  320  the terminal fades in
+ *  380  the address types itself out, 19 steps, ending at 1140
+ * 1340  the greeting types on the line below, 7 steps, ending at 1620
+ * 2200  content fades
+ * 2500  panels split apart, revealing the map behind
+ * 3300  overlay goes inert
  *
- * --intro-offset in globals.css is tuned to 2200ms so the hero's own entrance starts
- * as the panels open rather than playing unseen behind them.
+ * --intro-offset in globals.css is tuned to 2600ms so the hero's own entrance starts
+ * as the panels open rather than playing unseen behind them. Changing the numbers here
+ * means changing that one and the timeout in IntroController too.
  */
 
 .overlay {
@@ -41,12 +43,12 @@
 
 .panelTop {
   top: 0;
-  animation: splitUp 750ms var(--ease-exit) 2100ms forwards;
+  animation: splitUp 750ms var(--ease-exit) 2500ms forwards;
 }
 
 .panelBottom {
   bottom: 0;
-  animation: splitDown 750ms var(--ease-exit) 2100ms forwards;
+  animation: splitDown 750ms var(--ease-exit) 2500ms forwards;
 }
 
 @keyframes splitUp {
@@ -68,8 +70,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-6);
-  animation: contentOut 380ms var(--ease-exit) 1800ms forwards;
+  gap: var(--space-8);
+  padding: var(--space-6);
+  animation: contentOut 380ms var(--ease-exit) 2200ms forwards;
 }
 
 @keyframes contentOut {
@@ -79,94 +82,16 @@
   }
 }
 
-.route {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: 0.26em;
-  color: var(--hud-accent);
-}
-
-.code {
-  opacity: 0;
-}
-
-.codeFrom {
-  animation: fadeIn 500ms var(--ease-enter) 150ms forwards;
-}
-
-.codeTo {
-  animation: fadeIn 500ms var(--ease-enter) 1500ms forwards;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-.track {
-  position: relative;
-  width: clamp(120px, 26vw, 240px);
-  height: 1px;
-  background: var(--hud-border);
-}
-
-/* The lit portion of the route, drawn under the plane as it passes. */
-.track::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--hud-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  animation: draw 1300ms var(--ease-enter) 400ms forwards;
-}
-
-@keyframes draw {
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.plane {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  display: block;
-  color: #ffffff;
-  filter: drop-shadow(0 0 8px var(--hud-accent));
-  transform: translate(-50%, -50%);
-  animation: fly 1300ms var(--ease-enter) 400ms forwards;
-}
-
-@keyframes fly {
-  to {
-    left: 100%;
-  }
-}
-
 .name {
   margin: 0;
   font-size: clamp(1.75rem, 5vw, 3rem);
   font-weight: 600;
   letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-align: center;
   color: var(--fg);
   opacity: 0;
-  animation: rise 800ms var(--ease-enter) 800ms forwards;
-}
-
-.hint {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.24em;
-  color: var(--hud-dim);
-  opacity: 0;
-  animation: fadeIn 700ms var(--ease-enter) 1200ms forwards;
+  animation: rise 800ms var(--ease-enter) 120ms forwards;
 }
 
 @keyframes rise {
@@ -178,6 +103,134 @@
     opacity: 1;
     transform: none;
     filter: none;
+  }
+}
+
+/* The typed lines ----------------------------------------------------------- */
+
+.terminal {
+  display: flex;
+  flex-direction: column;
+  /* Both rows share one left edge; the block itself is what gets centred. */
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: clamp(0.8125rem, 2.6vw, 1rem);
+  /* Declared once and reused by every width calculation below: letter-spacing widens
+     each character, so measuring in bare `ch` stops short of the text. */
+  --track: 0.04em;
+  --step: calc(1ch + var(--track));
+  letter-spacing: var(--track);
+  opacity: 0;
+  animation: fadeIn 300ms var(--ease-enter) 320ms forwards;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* The greeting line carries no prompt, so it is indented by exactly the prompt's width
+   plus the gap. Without this the two lines start 18px apart and the block looks
+   accidentally ragged rather than deliberately aligned. */
+.row:last-child {
+  padding-left: calc(var(--step) + var(--space-2));
+}
+
+.prompt {
+  color: var(--hud-accent);
+  font-weight: 600;
+}
+
+/* Holds its final width from the first frame so nothing reflows mid-animation. */
+.line {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.typed {
+  display: inline-block;
+  clip-path: inset(0 100% 0 0);
+}
+
+.typedUrl {
+  color: var(--fg);
+  animation: reveal 760ms steps(19, end) 380ms forwards;
+}
+
+/* The greeting reads as a separate line, not as part of the address. */
+.typedGreeting {
+  color: var(--hud-accent);
+  animation: reveal 280ms steps(7, end) 1340ms forwards;
+}
+
+@keyframes reveal {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.caret {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0.55ch;
+  height: 1.15em;
+  background: var(--hud-accent);
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+/* Same duration and step count as each reveal, so the caret sits on the character being
+   written instead of drifting away from it. */
+.caretUrl {
+  animation:
+    walk 760ms steps(19, end) 380ms forwards,
+    blink 900ms step-end 380ms 1,
+    hide 1ms linear 1240ms forwards;
+}
+
+.caretGreeting {
+  animation:
+    walk 280ms steps(7, end) 1340ms forwards,
+    show 1ms linear 1340ms forwards,
+    blink 900ms step-end 1340ms infinite;
+}
+
+@keyframes walk {
+  to {
+    left: calc(var(--chars) * var(--step));
+  }
+}
+
+/* The caret hands off from the first line to the second rather than blinking on both. */
+@keyframes show {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hide {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
 }
 
