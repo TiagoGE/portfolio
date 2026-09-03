@@ -1,0 +1,39 @@
+# Dependências
+node_modules/
+
+# Build do Next
+.next/
+out/
+
+# TypeScript
+*.tsbuildinfo
+# Gerado pelo Next a cada execução; a documentação diz para não versionar.
+next-env.d.ts
+
+# Variáveis de ambiente. A regra ignora tudo e depois abre exceção para o exemplo,
+# que é justamente o arquivo que documenta quais variáveis existem, sem os valores.
+.env
+.env.*
+!.env.example
+
+# Hospedagem
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.idea/
+*.swp
+
+# Instruções de ferramenta. Ignoradas em vez de apagadas: o `next dev` reescreve o
+# AGENTS.md a cada execução, então apagá-lo só o traz de volta como arquivo solto.
+AGENTS.md
+CLAUDE.md

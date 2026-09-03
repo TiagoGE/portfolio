@@ -1,0 +1,267 @@
+.section {
+  background: var(--bg);
+  color: var(--fg);
+  padding: var(--space-24) var(--space-8);
+  position: relative;
+}
+
+/* Atmospheric wash, built from the climate's own accent rather than a fixed colour. */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60rem 30rem at 15% 0%, rgba(var(--accent-rgb), 0.09), transparent 70%),
+    radial-gradient(40rem 24rem at 85% 20%, rgba(var(--accent-rgb), 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.inner {
+  max-width: 68rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header {
+  margin-bottom: var(--space-16);
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 var(--space-4);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  margin: 0;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.grid {
+  display: grid;
+  /* 15rem, not 17rem: at ~1150px viewports the wider floor pushed the third column
+     past the right edge and clipped its text. */
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--space-8);
+  margin-bottom: var(--space-24);
+}
+
+.education,
+.chapter {
+  position: relative;
+  min-width: 0;
+  /* Clears the sticky bar when a map node jumps here. */
+  scroll-margin-top: 6rem;
+  border-top: 1px solid rgba(var(--rule-rgb), 0.28);
+  padding-top: var(--space-6);
+}
+
+/*
+ * The accent rule draws itself in across the top of each card as it arrives, slightly
+ * after the text settles. This is the part that reads as "the section is animating"
+ * rather than "the text faded in".
+ */
+.education::before,
+.chapter::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-slow) var(--ease-enter) 260ms;
+}
+
+.education[data-shown="true"]::before,
+.chapter[data-shown="true"]::before {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .education::before,
+  .chapter::before {
+    transform: scaleX(1);
+    transition: none;
+  }
+}
+
+.period {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  color: var(--fg-dim);
+  margin: 0 0 var(--space-3);
+}
+
+.school,
+.chapterTitle {
+  font-size: var(--text-xl);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  margin: 0 0 var(--space-2);
+  transition: color var(--dur-fast) var(--ease-enter);
+}
+
+/* Card hover: the whole card lifts, its rule lights up, the title takes the accent. */
+.grid .education[data-shown="true"]:hover,
+.grid .chapter[data-shown="true"]:hover {
+  transform: translateY(-5px);
+  transition-duration: var(--dur-fast);
+}
+
+.grid .education[data-shown="true"]:hover::before,
+.grid .chapter[data-shown="true"]:hover::before {
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.grid .education[data-shown="true"]:hover .school,
+.grid .chapter[data-shown="true"]:hover .chapterTitle {
+  color: var(--accent);
+}
+
+.program {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--accent);
+  margin: 0 0 var(--space-4);
+}
+
+.body {
+  color: var(--fg-dim);
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-16) var(--space-6);
+  }
+}
+
+/*
+ * Sticky top bar.
+ *
+ * The title parks against the top of the viewport and stays there while the whole
+ * section scrolls beneath it, which frees the full column width for content. The bar
+ * needs an opaque background: without one, body copy slides under the text and both
+ * become unreadable.
+ *
+ * Anchor targets carry scroll-margin-top so that jumping to one from a map node lands
+ * it below the bar rather than behind it.
+ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-bottom: var(--space-16);
+  padding: var(--space-4) 0;
+  background: var(--bg);
+  border-bottom: 1px solid rgba(var(--rule-rgb), 0.25);
+}
+
+.headerInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-6);
+}
+
+.header .kicker,
+.header .title {
+  margin: 0;
+}
+
+.header .title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-size: var(--text-xl);
+  max-width: none;
+}
+
+/* Languages from the degree. Plain text rather than pills: these are scanning keywords,
+   not a claim about what gets used daily, and pills would overstate them. */
+.alsoStudied {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.8;
+  color: var(--fg-dim);
+}
+
+.alsoStudiedLabel {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+/*
+ * Photograph inside a chapter card.
+ *
+ * Kept to just over half the card width so it stays clearly subordinate to the writing,
+ * and at the source aspect ratio so nothing important gets cropped out.
+ */
+.figure {
+  margin: var(--space-6) 0 0;
+  max-width: 62%;
+}
+
+.frame {
+  overflow: hidden;
+  border-radius: 2px;
+  aspect-ratio: 3 / 4;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 700ms var(--ease-enter) 200ms;
+}
+
+[data-shown="true"] .frame {
+  clip-path: inset(0 0 0 0);
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Vancouver's light is flat and grey; a little contrast keeps these from going muddy
+     against the dark page. */
+  filter: saturate(0.92) contrast(1.06);
+  transform: scale(1.05);
+  transition: transform 900ms var(--ease-enter) 200ms;
+}
+
+[data-shown="true"] .photo {
+  transform: none;
+}
+
+.figCaption {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  color: var(--fg-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame {
+    clip-path: none;
+    transition: none;
+  }
+
+  .photo {
+    transform: none;
+    transition: none;
+  }
+}

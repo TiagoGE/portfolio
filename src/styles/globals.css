@@ -1,0 +1,169 @@
+/*
+ * The shared skeleton.
+ *
+ * Sections are free to swap every colour below via a `.climate-*` class. What they may
+ * never change: the type scale, the spacing scale, and the easing curves. Those three
+ * are what keep radically different sections reading as one site.
+ */
+
+:root {
+  /* Type ------------------------------------------------------------------ */
+  /*
+   * Two faces, no more. Space Grotesk carries display and body; JetBrains Mono carries
+   * every instrument reading — HUD, chips, labels, periods. The system fallbacks stay
+   * in the stack so a failed font load degrades instead of breaking.
+   */
+  --font-sans: var(--font-display), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-mono-var), ui-monospace, "SF Mono", "Cascadia Mono", Menlo,
+    monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.5rem;
+  --text-3xl: clamp(2.75rem, 7vw, 5.5rem);
+
+  /* Space — a single 4px-rooted scale, used everywhere. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Motion — constant across every section. */
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  /*
+   * How long the intro overlay owns the screen. Entrance animations on the first
+   * view add this so they play as the panels open instead of unseen behind them.
+   * Zeroed the moment the intro is skipped.
+   */
+  --intro-offset: 2200ms;
+
+  --dur-fast: 180ms;
+  --dur-base: 420ms;
+  --dur-slow: 900ms;
+
+  /* Default climate: the cockpit. Deep, instrument-lit. */
+  --bg: #05070a;
+  --fg: #e6edf3;
+  --fg-dim: #7d8b9a;
+  --accent: #4cc2ff;
+
+  /* Raised from near-black: at the original values the continents read as empty
+     space rather than as a map. */
+  --map-land: #121e2a;
+  --map-stroke: #35516b;
+  --map-grid: #16232f;
+  --map-node: #7d95a8;
+  --map-node-active: #4cc2ff;
+  --map-route-planned: #3f5c75;
+  --map-route-live: #4cc2ff;
+  --map-plane: #ffffff;
+
+  --hud-bg: rgba(8, 13, 19, 0.72);
+  --hud-border: #1c2b38;
+  --hud-fg: #e6edf3;
+  --hud-dim: #5a7183;
+  --hud-accent: #4cc2ff;
+
+  /*
+   * Channel triplets for the accent and for hairline rules. Sections build their
+   * translucent washes, borders and hover fills from these instead of hardcoding
+   * rgba() literals — otherwise changing a climate's accent silently leaves the old
+   * colour behind in every border and gradient.
+   */
+  --accent-rgb: 76, 194, 255;
+  --rule-rgb: 90, 113, 131;
+}
+
+/*
+ * Each climate's page colour is also declared at :root, because the strip that fades
+ * one section into the next needs both ends at once and cannot see inside either
+ * climate's scope.
+ */
+:root {
+  --canada-bg: #120709;
+  --brasil-bg: #06130d;
+}
+
+/* Vancouver. Deep red. */
+.climate-canada {
+  --bg: var(--canada-bg);
+  --fg: #f6e6e6;
+  --fg-dim: #b78f8f;
+  --accent: #e0574f;
+  --accent-rgb: 224, 87, 79;
+  --rule-rgb: 183, 143, 143;
+}
+
+/* Brazil and Trampocerto. Green. */
+.climate-brasil {
+  --bg: var(--brasil-bg);
+  --fg: #e2f2e6;
+  --fg-dim: #86ab93;
+  --accent: #45d483;
+  --accent-rgb: 69, 212, 131;
+  --rule-rgb: 134, 171, 147;
+}
+
+html[data-intro="skip"] {
+  --intro-offset: 0ms;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--dur-slow) var(--ease-enter);
+}
+
+a {
+  color: var(--accent);
+}
+
+/* Screen-reader-only, for the skip link and map fallbacks. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

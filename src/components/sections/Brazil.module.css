@@ -1,0 +1,607 @@
+.section {
+  background: var(--bg);
+  color: var(--fg);
+  padding: var(--space-24) var(--space-8);
+  position: relative;
+}
+
+/* Sun wash. Warmer and higher-contrast than the Canada section, on purpose. */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(50rem 26rem at 80% 0%, rgba(var(--accent-rgb), 0.12), transparent 70%),
+    radial-gradient(36rem 20rem at 10% 30%, rgba(var(--accent-rgb), 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.inner {
+  max-width: 68rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header {
+  margin-bottom: var(--space-16);
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 var(--space-4);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  margin: 0;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.body {
+  color: var(--fg-dim);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Certification --------------------------------------------------------- */
+
+.cert {
+  scroll-margin-top: 6rem;
+  display: grid;
+  grid-template-columns: minmax(9rem, 12rem) 1fr;
+  gap: var(--space-8);
+  padding: var(--space-8) 0;
+  border-top: 1px solid rgba(var(--rule-rgb), 0.3);
+  border-bottom: 1px solid rgba(var(--rule-rgb), 0.3);
+  margin-bottom: var(--space-24);
+}
+
+.certBadge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+}
+
+.certIssuer {
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.certDate {
+  color: var(--fg-dim);
+}
+
+.certTitle {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-4);
+}
+
+/* Project ---------------------------------------------------------------- */
+
+.project {
+  scroll-margin-top: 6rem;
+}
+
+.projectHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.projectTitle {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 var(--space-2);
+}
+
+.projectRole {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--accent);
+  margin: 0;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg);
+  border: 1px solid rgba(var(--rule-rgb), 0.4);
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #52d17c;
+  box-shadow: 0 0 8px #52d17c;
+}
+
+.lede {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--fg);
+  max-width: 54ch;
+  margin: 0 0 var(--space-8);
+  text-wrap: pretty;
+}
+
+.platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.platforms li::before {
+  content: "▸ ";
+  color: var(--accent);
+}
+
+.stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--space-8);
+  margin-bottom: var(--space-16);
+}
+
+.stackLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+  opacity: 0.85;
+  margin: 0 0 var(--space-1);
+}
+
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: var(--space-8);
+  margin-bottom: var(--space-16);
+}
+
+.highlightTitle {
+  font-size: var(--text-base);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--accent);
+}
+
+.repoLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  color: var(--bg);
+  background: var(--accent);
+  padding: var(--space-3) var(--space-6);
+  border-radius: 2px;
+  transition: transform var(--dur-fast) var(--ease-enter);
+}
+
+.repoLink:hover {
+  transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-16) var(--space-6);
+  }
+
+  .cert {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+/* Same sticky top bar as the Canada section. See Canada.module.css for the
+   reasoning behind the opaque background and the scroll-margin. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-bottom: var(--space-16);
+  padding: var(--space-4) 0;
+  background: var(--bg);
+  border-bottom: 1px solid rgba(var(--rule-rgb), 0.25);
+}
+
+.headerInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-6);
+}
+
+.header .kicker,
+.header .title {
+  margin: 0;
+}
+
+.header .title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-size: var(--text-xl);
+  max-width: none;
+}
+
+
+/*
+ * The status doubles as the link to the live product.
+ *
+ * Signalling it is clickable takes more than a cursor: the border picks up the accent,
+ * an outward arrow appears, and the whole pill lifts on hover. The arrow also warns
+ * that the link leaves the site, which the aria-label states outright for screen
+ * readers.
+ */
+.statusLink {
+  text-decoration: none;
+  cursor: pointer;
+  border-color: var(--accent);
+  transition:
+    transform var(--dur-fast) var(--ease-enter),
+    background-color var(--dur-fast) var(--ease-enter),
+    box-shadow var(--dur-fast) var(--ease-enter);
+}
+
+.statusArrow {
+  font-size: 0.9em;
+  line-height: 1;
+  transition: transform var(--dur-fast) var(--ease-enter);
+}
+
+.statusLink:hover,
+.statusLink:focus-visible {
+  transform: translateY(-2px);
+  background-color: rgba(var(--accent-rgb), 0.14);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+
+.statusLink:hover .statusArrow,
+.statusLink:focus-visible .statusArrow {
+  transform: translate(2px, -2px);
+}
+
+.statusLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* A slow breath so the pill reads as live even before the pointer reaches it. */
+@media (prefers-reduced-motion: no-preference) {
+  .statusLink {
+    animation: breathe 3.2s var(--ease-enter) infinite;
+  }
+}
+
+@keyframes breathe {
+  50% {
+    box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.12);
+  }
+}
+
+/* The status is the credential, the call to action is the invitation. Splitting them
+   by weight and colour keeps the first from swallowing the second. */
+.statusText {
+  color: var(--fg-dim);
+}
+
+.statusSep {
+  color: var(--fg-dim);
+  opacity: 0.6;
+}
+
+.statusCta {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Store listings. Quieter than the primary status link so they read as "also here",
+   not as a second call to action competing with it. */
+.stores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-16);
+}
+
+.store {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--fg-dim);
+  border: 1px solid rgba(var(--rule-rgb), 0.3);
+  border-radius: 999px;
+  padding: var(--space-2) var(--space-4);
+  transition:
+    color var(--dur-fast) var(--ease-enter),
+    border-color var(--dur-fast) var(--ease-enter),
+    transform var(--dur-fast) var(--ease-enter);
+}
+
+.store:hover,
+.store:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/*
+ * What was hard.
+ *
+ * Deliberately set as prose, not as another card grid. Everything above this point is
+ * scannable; this block asks to be read, and it is the part that separates someone who
+ * shipped a system from someone who listed technologies. Wide numbers, generous
+ * spacing, one column.
+ */
+.challenges {
+  border-top: 1px solid rgba(var(--rule-rgb), 0.3);
+  padding-top: var(--space-12);
+  margin-bottom: var(--space-16);
+}
+
+.challengesLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+  margin: 0 0 var(--space-12);
+}
+
+.challenge {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: var(--space-4);
+  max-width: 56rem;
+  margin-bottom: var(--space-12);
+}
+
+.challenge:last-child {
+  margin-bottom: 0;
+}
+
+.challengeIndex {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--accent);
+  opacity: 0.6;
+  padding-top: 0.35em;
+}
+
+.challengeTitle {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--space-3);
+}
+
+.challengeBody {
+  margin: 0;
+  color: var(--fg-dim);
+  font-size: var(--text-base);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+@media (max-width: 768px) {
+  .challenge {
+    grid-template-columns: 2rem 1fr;
+    gap: var(--space-3);
+  }
+}
+
+/*
+ * Secondary projects.
+ *
+ * Set as a quiet list rather than cards on purpose. Trampocerto carries this section;
+ * giving these the same visual weight would flatten the difference between a product
+ * in production and a set of side builds. Hairline rules, no pills, no borders around
+ * anything.
+ */
+.side {
+  border-top: 1px solid rgba(var(--rule-rgb), 0.3);
+  padding-top: var(--space-12);
+  margin-top: var(--space-24);
+}
+
+.sideLabel {
+  /* Anchor target for the map node: clears the sticky bar on a jump. */
+  scroll-margin-top: 6rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  font-weight: 500;
+  margin: 0 0 var(--space-8);
+}
+
+.sideItem {
+  max-width: 52rem;
+  padding-bottom: var(--space-8);
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid rgba(var(--rule-rgb), 0.16);
+}
+
+.sideName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  color: var(--fg);
+  transition: color var(--dur-fast) var(--ease-enter);
+}
+
+.sideName:hover,
+.sideName:focus-visible {
+  color: var(--accent);
+}
+
+.sideArrow {
+  font-size: 0.75em;
+  transition: transform var(--dur-fast) var(--ease-enter);
+}
+
+.sideName:hover .sideArrow,
+.sideName:focus-visible .sideArrow {
+  transform: translate(2px, -2px);
+}
+
+.sideBody {
+  margin: var(--space-3) 0 0;
+  color: var(--fg-dim);
+  font-size: var(--text-sm);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.sideMeta {
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  opacity: 0.75;
+}
+
+.sideMore {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  color: var(--fg-dim);
+  transition: color var(--dur-fast) var(--ease-enter);
+}
+
+.sideMore:hover,
+.sideMore:focus-visible {
+  color: var(--accent);
+}
+
+/*
+ * Trampocerto body: the description on the left, the stack on the right.
+ *
+ * The right column starts under the status pill, which until now sat alone above a
+ * column of empty space. Putting the stack there also cuts a long vertical run of
+ * pills that pushed the engineering decisions further down the page.
+ */
+.projectBody {
+  margin-bottom: var(--space-16);
+}
+
+@media (min-width: 1000px) {
+  .projectBody {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .projectBody .stack {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-bottom: 0;
+  }
+
+  .projectMain .stores {
+    margin-bottom: 0;
+  }
+}
+
+/* Stack entries: a label and a run of names, set tight. */
+.stackItems {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.85;
+  color: var(--fg);
+  text-wrap: pretty;
+}
+
+/* The certificate itself, kept to reading width so it documents the claim without
+   turning into a banner. */
+.certImage {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  height: auto;
+  margin-top: var(--space-6);
+  border: 1px solid rgba(var(--rule-rgb), 0.25);
+  border-radius: 2px;
+}
+
+.certVerify {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--fg-dim);
+  border-bottom: 1px solid rgba(var(--rule-rgb), 0.4);
+  padding-bottom: 2px;
+  transition:
+    color var(--dur-fast) var(--ease-enter),
+    border-color var(--dur-fast) var(--ease-enter);
+}
+
+.certVerify:hover,
+.certVerify:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+}

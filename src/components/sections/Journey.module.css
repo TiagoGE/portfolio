@@ -1,0 +1,151 @@
+/* Scroll room for the scrub. 400vh ≈ four screens of travel. */
+.journey {
+  position: relative;
+  height: 400vh;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero {
+  position: absolute;
+  left: var(--space-16);
+  bottom: var(--space-16);
+  max-width: 34rem;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-enter);
+}
+
+/*
+ * Entrance sequence. This is the first screen, so it has to move on arrival — without
+ * it the site reads as static no matter how much motion lives further down.
+ */
+.role,
+.name,
+.tagline,
+.hint {
+  animation: rise var(--dur-slow) var(--ease-enter) both;
+}
+
+.role {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 var(--space-4);
+  animation-delay: calc(var(--intro-offset) + 120ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(8px);
+  }
+}
+
+.name {
+  font-size: var(--text-3xl);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  margin: 0 0 var(--space-6);
+  animation-delay: calc(var(--intro-offset) + 240ms);
+}
+
+.tagline {
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--fg-dim);
+  margin: 0;
+  text-wrap: balance;
+  animation-delay: calc(var(--intro-offset) + 380ms);
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin: var(--space-12) 0 0;
+  /* Entrance first, then the looping nudge. */
+  animation:
+    rise var(--dur-slow) var(--ease-enter) calc(var(--intro-offset) + 560ms) both,
+    drift 2.4s var(--ease-enter) calc(var(--intro-offset) + 1400ms) infinite;
+}
+
+.hudSlot {
+  position: absolute;
+  top: var(--space-16);
+  right: var(--space-16);
+}
+
+/* Movement only. This keyframe used to animate opacity too, which overrode the
+   scroll-driven fade and left the hint pulsing back into view after it should have
+   gone — an animated property beats an inline style. */
+@keyframes drift {
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* Mobile: the sticky scrub still works, but the layout stacks and the HUD shrinks. */
+@media (max-width: 768px) {
+  .hero {
+    left: var(--space-6);
+    right: var(--space-6);
+    bottom: var(--space-8);
+  }
+
+  .hudSlot {
+    top: var(--space-6);
+    right: var(--space-6);
+    left: var(--space-6);
+  }
+
+  .hudSlot > * {
+    min-width: 0;
+  }
+}
+
+/*
+ * Mobile scrim behind the hero.
+ *
+ * On a narrow screen the hero copy lands right on São Paulo, the plane and the GRU
+ * labels, and the two fight each other. This fades the map into the page background
+ * under the text so the words stay readable without being boxed in.
+ *
+ * It belongs to the hero rather than to the sticky container on purpose. The hero dims
+ * to 50% as the flight scrubs, and the scrim has to dim with it. Attached to the
+ * container it would stay at full strength and permanently hide São Paulo, which is
+ * where the plane lands: the payoff of the whole animation.
+ *
+ * z-index on the hero creates the stacking context; the -1 on the scrim puts it behind
+ * the words but still above the map.
+ */
+@media (max-width: 768px) {
+  .hero {
+    z-index: 1;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--space-6) * -1);
+    right: calc(var(--space-6) * -1);
+    /* Starts well above the copy and reaches full background early: the role line is
+       the topmost element and it lands right on the plane, so the ramp has to be
+       opaque by the time it gets there. */
+    top: -6rem;
+    bottom: calc(var(--space-8) * -1);
+    z-index: -1;
+    background: linear-gradient(to bottom, transparent, var(--bg) 18%);
+    pointer-events: none;
+  }
+}

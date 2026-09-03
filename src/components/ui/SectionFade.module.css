@@ -1,0 +1,5 @@
+.fade {
+  height: clamp(7rem, 20vh, 15rem);
+  /* Both ends read from :root, since neither climate's scope can see the other. */
+  background: linear-gradient(to bottom, var(--canada-bg), var(--brasil-bg));
+}

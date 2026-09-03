@@ -1,0 +1,116 @@
+/*
+ * Hidden by default and only shown once the viewport is wide enough that the panel sits
+ * entirely in the gutter beside the centred content column. Below that it would cover
+ * body text, so it is better absent than overlapping.
+ */
+.mini {
+  display: none;
+  position: fixed;
+  left: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 40;
+  padding: var(--space-2);
+  background: var(--hud-bg);
+  border: 1px solid var(--hud-border);
+  border-radius: 2px;
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-base) var(--ease-enter),
+    transform var(--dur-base) var(--ease-enter);
+}
+
+.mini[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.header {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hud-accent);
+  margin-bottom: var(--space-2);
+}
+
+.svg {
+  display: block;
+}
+
+.land path {
+  fill: none;
+  stroke: var(--hud-border);
+  stroke-width: 0.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.route {
+  fill: none;
+  stroke: var(--hud-accent);
+  stroke-width: 1;
+  opacity: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.dot {
+  fill: var(--hud-dim);
+  transition:
+    fill var(--dur-base) var(--ease-enter),
+    r var(--dur-base) var(--ease-enter);
+}
+
+.dot[data-active="true"] {
+  fill: var(--hud-accent);
+  filter: drop-shadow(0 0 5px var(--hud-accent));
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--hud-border);
+}
+
+.jump {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--hud-dim);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  padding: 2px var(--space-2);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-enter),
+    border-color var(--dur-fast) var(--ease-enter);
+}
+
+.jump:hover,
+.jump:focus-visible {
+  color: var(--hud-fg);
+  border-color: var(--hud-border);
+}
+
+.jump[data-active="true"] {
+  color: var(--hud-accent);
+  border-color: var(--hud-accent);
+}
+
+/*
+ * 1440px is where the gutter beside a 68rem content column finally clears the panel's
+ * ~138px footprint plus its 24px offset. Narrower than that and it lands on text.
+ */
+@media (min-width: 1440px) {
+  .mini {
+    display: block;
+  }
+}

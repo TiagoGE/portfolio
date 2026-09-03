@@ -1,0 +1,193 @@
+/*
+ * Timeline (ms from first paint):
+ *    0  panels closed, GRU fades in
+ *  500  route line draws while the plane flies it
+ * 1500  YVR arrives
+ * 1800  content fades out
+ * 2100  panels split apart, revealing the map behind
+ * 2850  overlay goes inert
+ *
+ * --intro-offset in globals.css is tuned to 2200ms so the hero's own entrance starts
+ * as the panels open rather than playing unseen behind them.
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  /* Never intercepts input — the skip listener lives on window instead. */
+  pointer-events: none;
+}
+
+/*
+ * "skip"  — decided before first paint (repeat visit, reduced motion) or by the visitor
+ *           cutting it short. Also zeroes --intro-offset so entrances play immediately.
+ * "done"  — set by the controller once the sequence finishes. Deliberately a separate
+ *           value: reusing "skip" here would zero --intro-offset while the hero's
+ *           delayed animations were still running, restarting them mid-flight.
+ */
+:global(html[data-intro="skip"]) .overlay,
+:global(html[data-intro="done"]) .overlay {
+  display: none;
+}
+
+.panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50.5%; /* Overlap guards against a hairline seam on fractional DPRs. */
+  background: var(--bg);
+}
+
+.panelTop {
+  top: 0;
+  animation: splitUp 750ms var(--ease-exit) 2100ms forwards;
+}
+
+.panelBottom {
+  bottom: 0;
+  animation: splitDown 750ms var(--ease-exit) 2100ms forwards;
+}
+
+@keyframes splitUp {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes splitDown {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  animation: contentOut 380ms var(--ease-exit) 1800ms forwards;
+}
+
+@keyframes contentOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  color: var(--hud-accent);
+}
+
+.code {
+  opacity: 0;
+}
+
+.codeFrom {
+  animation: fadeIn 500ms var(--ease-enter) 150ms forwards;
+}
+
+.codeTo {
+  animation: fadeIn 500ms var(--ease-enter) 1500ms forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.track {
+  position: relative;
+  width: clamp(120px, 26vw, 240px);
+  height: 1px;
+  background: var(--hud-border);
+}
+
+/* The lit portion of the route, drawn under the plane as it passes. */
+.track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--hud-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: draw 1300ms var(--ease-enter) 400ms forwards;
+}
+
+@keyframes draw {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.plane {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: block;
+  color: #ffffff;
+  filter: drop-shadow(0 0 8px var(--hud-accent));
+  transform: translate(-50%, -50%);
+  animation: fly 1300ms var(--ease-enter) 400ms forwards;
+}
+
+@keyframes fly {
+  to {
+    left: 100%;
+  }
+}
+
+.name {
+  margin: 0;
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  opacity: 0;
+  animation: rise 800ms var(--ease-enter) 800ms forwards;
+}
+
+.hint {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.24em;
+  color: var(--hud-dim);
+  opacity: 0;
+  animation: fadeIn 700ms var(--ease-enter) 1200ms forwards;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(16px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/*
+ * Belt and braces. The inline script already stops the intro rendering under reduced
+ * motion, but if storage throws before that runs, this keeps it off the screen instead
+ * of playing a full-screen animation at someone who asked for none.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    display: none;
+  }
+}

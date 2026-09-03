@@ -1,0 +1,56 @@
+.reveal {
+  opacity: 0;
+  /*
+   * Entrance properties run slow; the interactive ones run fast. They share a single
+   * declaration on purpose: `transition` is one property, so a second declaration in a
+   * consumer stylesheet would replace this list wholesale and silently kill the
+   * entrance animation. Consumers add :hover rules only — never their own `transition`.
+   */
+  transition:
+    opacity var(--dur-slow) var(--ease-enter),
+    transform var(--dur-slow) var(--ease-enter),
+    filter var(--dur-slow) var(--ease-enter),
+    color var(--dur-fast) var(--ease-enter),
+    background-color var(--dur-fast) var(--ease-enter),
+    border-color var(--dur-fast) var(--ease-enter),
+    box-shadow var(--dur-fast) var(--ease-enter);
+}
+
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/*
+ * Blocks of text. Travel and blur are deliberately generous — at 18px and pure fade the
+ * motion was technically present but read as nothing.
+ */
+.rise {
+  transform: translateY(34px);
+  filter: blur(6px);
+}
+
+/* Chips and other small tokens: they snap in rather than travel. */
+.pop {
+  transform: translateY(10px) scale(0.82);
+}
+
+/*
+ * Media carries its own reveal (a clip-path curtain), so this variant only supplies the
+ * data-shown flag and gets out of the way. Qualified with .reveal so it beats the base
+ * opacity regardless of rule order.
+ */
+.reveal.media {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+    transition-delay: 0ms !important;
+  }
+}
